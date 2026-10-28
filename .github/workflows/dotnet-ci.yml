@@ -21,10 +21,21 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore practice1/practice1.csproj
 
       - name: Build application
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build practice1/practice1.csproj --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test --configuration Release --no-build
+        run: dotnet test practice1/practice1.csproj --configuration Release --no-build
+
+      - name: Publish application
+        run: dotnet publish practice1/practice1.csproj --configuration Release --no-build --output ./publish
+
+      - name: Upload deployment artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: practice1-release
+          path: ./publish/
+          if-no-files-found: error
+          retention-days: 7
